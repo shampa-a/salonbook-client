@@ -15,20 +15,27 @@ interface AuthUserResponse {
 
 export async function getDashboardPath(): Promise<string> {
   try {
-    const response = await fetch(
-      `${API_URL}/api/v1/auth/me`,
-      {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      },
-    );
+    const response = await fetch(`${API_URL}/api/v1/auth/me`, {
+      method: "GET",
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    console.log("Auth API status:", response.status);
 
     if (!response.ok) {
-      throw new Error("Unable to verify your account.");
+      const errorText = await response.text();
+
+      console.error("Auth API response:", errorText);
+
+      throw new Error(
+        `Authentication verification failed (${response.status})`,
+      );
     }
 
     const result: AuthUserResponse = await response.json();
+
+    console.log("Auth API user:", result.user);
 
     if (!result.success || !result.user) {
       throw new Error("User information not available.");
@@ -49,10 +56,11 @@ export async function getDashboardPath(): Promise<string> {
         return "/customer/dashboard";
 
       default:
-        return "/login";
+        throw new Error("Invalid user role.");
     }
   } catch (error) {
     console.error("Dashboard redirect error:", error);
+
     return "/login";
   }
 }

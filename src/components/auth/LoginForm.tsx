@@ -5,7 +5,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { authClient } from "@/lib/auth-client";
-import { getDashboardPath } from "@/lib/auth-redirect";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+interface AuthUserResponse {
+  success: boolean;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+    role: "customer" | "salonOwner" | "admin";
+    blocked: boolean;
+  };
+  message?: string;
+}
 
 export default function LoginForm() {
   const router = useRouter();
@@ -44,15 +58,68 @@ export default function LoginForm() {
         return;
       }
 
-      setSuccess("Login successful. Redirecting...");
+      setSuccess("Login successful. Verifying your account...");
 
-      const dashboardPath = await getDashboardPath();
+      // Verify the authenticated user
+      const response = await fetch(
+        `${API_URL}/api/v1/auth/me`,
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Unable to verify session. Status: ${response.status}`,
+        );
+      }
+
+      const result: AuthUserResponse = await response.json();
+
+      if (!result.success || !result.user) {
+        throw new Error("User information not available.");
+      }
+
+      const user = result.user;
+
+      if (user.blocked) {
+        await authClient.signOut();
+        throw new Error("Your account has been blocked.");
+      }
+
+      let dashboardPath: string;
+
+      switch (user.role) {
+        case "admin":
+          dashboardPath = "/admin/dashboard";
+          break;
+
+        case "salonOwner":
+          dashboardPath = "/salon/dashboard";
+          break;
+
+        case "customer":
+          dashboardPath = "/customer/dashboard";
+          break;
+
+        default:
+          throw new Error("Invalid account role.");
+      }
+
+      setSuccess("Login successful. Redirecting...");
 
       router.replace(dashboardPath);
       router.refresh();
     } catch (err) {
-      console.error("Login error:", err);
-      setError("Unable to sign in. Please try again.");
+      console.error("Login process error:", err);
+
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to sign in. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -69,7 +136,9 @@ export default function LoginForm() {
       });
     } catch (err) {
       console.error("Google login error:", err);
+
       setError("Google login failed. Please try again.");
+
       setGoogleLoading(false);
     }
   };
@@ -156,7 +225,9 @@ export default function LoginForm() {
 
       <div className="my-6 flex items-center gap-4">
         <div className="h-px flex-1 bg-gray-200" />
+
         <span className="text-sm text-gray-400">OR</span>
+
         <div className="h-px flex-1 bg-gray-200" />
       </div>
 
@@ -174,7 +245,7 @@ export default function LoginForm() {
       </button>
 
       <p className="mt-7 text-center text-sm text-gray-500">
-        Don&apost have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           href="/register"
           className="font-semibold text-[#75415F] hover:underline"
@@ -194,15 +265,18 @@ function GoogleIcon() {
         d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5Z"
         transform="translate(0 3)"
       />
+
       <path
         fill="#4285F4"
         d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.24 5.48-4.7 7.18l7.2 5.59c4.2-3.88 6.54-9.59 6.54-17.24Z"
       />
+
       <path
         fill="#FBBC05"
         d="M10.53 28.59a14.4 14.4 0 0 1 0-9.18l-7.98-6.2a24 24 0 0 0 0 21.58l7.98-6.2Z"
         transform="translate(0 3)"
       />
+
       <path
         fill="#34A853"
         d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.2-5.59c-2 1.35-4.56 2.14-8.71 2.14-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.2C6.51 42.62 14.62 48 24 48Z"

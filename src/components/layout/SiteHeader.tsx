@@ -50,7 +50,7 @@ export default function SiteHeader() {
           </Link>
 
           <Link
-            href="/signup"
+            href="/register"
             className="rounded-full bg-[#75415F] px-6 py-3 text-sm font-semibold text-white shadow-md shadow-[#75415F]/15 transition hover:bg-[#593149]"
           >
             Get Started
@@ -125,7 +125,7 @@ export default function SiteHeader() {
             </Link>
 
             <Link
-              href="/signup"
+              href="/register"
               onClick={() => setMenuOpen(false)}
               className="rounded-full bg-[#75415F] px-5 py-3 text-center font-semibold text-white"
             >
