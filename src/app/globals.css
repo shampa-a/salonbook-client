@@ -1,21 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #19151a;
+  --background: #fcfaf9;
+  --foreground: #282129;
 
   --primary: #75415f;
   --primary-dark: #593149;
-  --secondary: #f7edf2;
+  --primary-light: #f4eaf0;
+
+  --secondary: #f8f0f3;
+  --accent: #c18a9d;
 
   --muted: #77717a;
-  --border: #eee7ec;
+  --border: #eee5e9;
 
   --success: #15803d;
   --warning: #b45309;
   --danger: #dc2626;
 
-  --font-sans: Arial, Helvetica, sans-serif;
+  --card: #ffffff;
 }
 
 @theme inline {
@@ -24,12 +27,20 @@
 
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
+
   --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
 
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-card: var(--card);
 
-  --font-sans: var(--font-geist-sans);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --font-sans: Arial, Helvetica, sans-serif;
 }
 
 * {
@@ -67,6 +78,10 @@ a {
 
 button {
   cursor: pointer;
+}
+
+img {
+  max-width: 100%;
 }
 
 ::selection {
