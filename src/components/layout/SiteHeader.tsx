@@ -5,31 +5,35 @@ import Link from "next/link";
 import SalonBookLogo from "@/components/brand/SalonBookLogo";
 
 const navigation = [
-  { label: "Discover", href: "/salons" },
-  { label: "Categories", href: "/categories" },
-  { label: "How It Works", href: "/how-it-works" },
+  { label: "Discover", href: "#discover" },
+  { label: "Categories", href: "#categories" },
+  { label: "How It Works", href: "#how-it-works" },
 ];
 
 export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#eee5e9] bg-white/90 backdrop-blur-xl">
       <div className="mx-auto flex h-[82px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12">
 
         {/* Brand */}
-        <SalonBookLogo />
+        <div onClick={closeMenu}>
+          <SalonBookLogo />
+        </div>
 
         {/* Desktop Navigation */}
         <nav className="hidden items-center gap-9 lg:flex">
           {navigation.map((item) => (
-            <Link
+            <a
               key={item.label}
               href={item.href}
               className="text-sm font-medium text-[#625963] transition hover:text-[#75415F]"
             >
               {item.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -60,9 +64,10 @@ export default function SiteHeader() {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((previous) => !previous)}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
           className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#eee5e9] text-[#75415F] lg:hidden"
         >
           {menuOpen ? (
@@ -73,6 +78,7 @@ export default function SiteHeader() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <path d="M18 6L6 18M6 6L18 18" />
             </svg>
@@ -84,6 +90,7 @@ export default function SiteHeader() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <path d="M4 7H20M4 12H20M4 17H20" />
             </svg>
@@ -93,24 +100,27 @@ export default function SiteHeader() {
 
       {/* Mobile Navigation */}
       {menuOpen && (
-        <div className="border-t border-[#eee5e9] bg-white px-5 py-6 lg:hidden">
+        <div
+          id="mobile-navigation"
+          className="border-t border-[#eee5e9] bg-white px-5 py-6 lg:hidden"
+        >
           <nav className="flex flex-col gap-5">
             {navigation.map((item) => (
-              <Link
+              <a
                 key={item.label}
                 href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="text-base font-medium text-[#493B47]"
+                onClick={closeMenu}
+                className="text-base font-medium text-[#493B47] transition hover:text-[#75415F]"
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
 
             <hr className="border-[#eee5e9]" />
 
             <Link
               href="/login"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="font-semibold text-[#75415F]"
             >
               Sign in
@@ -118,7 +128,7 @@ export default function SiteHeader() {
 
             <Link
               href="/for-business"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="rounded-full border border-[#75415F] px-5 py-3 text-center font-semibold text-[#75415F]"
             >
               List your salon
@@ -126,7 +136,7 @@ export default function SiteHeader() {
 
             <Link
               href="/register"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="rounded-full bg-[#75415F] px-5 py-3 text-center font-semibold text-white"
             >
               Get Started

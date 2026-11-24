@@ -347,7 +347,10 @@ export default function DiscoverySections() {
       </section>
 
       {/* Popular Services */}
-      <section className="bg-white px-5 py-20 sm:px-8 lg:px-12">
+      <section
+  id="categories"
+  className="scroll-mt-24 bg-white px-5 py-20 sm:px-8 lg:px-12"
+>
         <div className="mx-auto max-w-[1440px]">
           <div className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A76583]">
@@ -400,7 +403,10 @@ export default function DiscoverySections() {
       </section>
 
       {/* How It Works */}
-      <section className="bg-[#F8F0F3] px-5 py-20 sm:px-8 lg:px-12">
+      <section
+  id="how-it-works"
+  className="scroll-mt-24 bg-[#F8F0F3] px-5 py-20 sm:px-8 lg:px-12"
+>
         <div className="mx-auto max-w-[1440px]">
           <div className="mx-auto mb-14 max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A76583]">
@@ -483,7 +489,10 @@ export default function DiscoverySections() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-[#FCFAF9] px-5 py-20 sm:px-8 lg:px-12">
+      <section
+  id="discover"
+  className="scroll-mt-24 bg-[#FCFAF9] px-5 py-20 sm:px-8 lg:px-12"
+>
         <div className="mx-auto max-w-[1440px]">
           <div className="mx-auto mb-12 max-w-2xl text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#A76583]">

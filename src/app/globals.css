@@ -88,3 +88,7 @@ img {
   background: #ead5e1;
   color: #593149;
 }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
