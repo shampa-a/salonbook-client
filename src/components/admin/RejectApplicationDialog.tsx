@@ -6,7 +6,7 @@ interface RejectApplicationDialogProps {
   open: boolean;
   loading: boolean;
   onClose: () => void;
-  onConfirm: (reason: string) => Promise<void>;
+  onConfirm: (reason: string) => Promise<boolean>;
 }
 
 export default function RejectApplicationDialog({
